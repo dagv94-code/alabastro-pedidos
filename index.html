@@ -306,7 +306,7 @@
         </div>
 
         <p class="text-[11px] text-stone-500 text-center">
-          * El peso exacto final se confirma al momento del pesaje de las piezas empacadas antes del despacho.
+          El peso exacto final se confirma al momento del pesaje de las piezas empacadas antes del despacho.
         </p>
       </div>
 
@@ -323,36 +323,54 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- MODAL 2: PANEL OCULTO DE GESTIÓN DE PRECIOS Y DISPONIBILIDAD          -->
+  <!-- MODAL 2: PANEL OCULTO DE GESTIÓN COMPLETA DE PRODUCTOS                -->
   <!-- ===================================================================== -->
   <div id="modal-admin" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden my-auto border border-stone-300">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden my-auto border border-stone-300">
       <div class="bg-stone-900 text-white px-5 py-4 flex items-center justify-between">
         <div>
           <p class="text-[10px] uppercase tracking-widest text-red-400 font-bold">Panel Privado · Agropecuaria Alabastro</p>
-          <h3 class="font-bold text-base">Precios y Disponibilidad por Beneficio</h3>
+          <h3 class="font-bold text-base">Gestión de Cortes, Precios y Disponibilidad</h3>
         </div>
         <button onclick="cerrarModalAdmin()" class="text-white/70 hover:text-white text-xl font-bold px-2">✕</button>
       </div>
 
-      <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+      <div class="p-5 space-y-4 max-h-[80vh] overflow-y-auto">
         <p class="text-xs text-stone-600 bg-stone-100 p-3 rounded-xl">
-          Ajusta el precio en divisas ($/kg) o desactiva el interruptor <strong>Visible</strong> para ocultar temporalmente un corte que no tengas disponible en este beneficio.
+          Agrega nuevos cortes, edita <strong>nombre, descripción o precio ($/kg)</strong>, oculta temporalmente o elimina productos. Al pulsar <strong>Aplicar Cambios</strong> se guarda en este dispositivo; usa <strong>Copiar Código JS</strong> si deseas fijar los cambios permanentemente en GitHub.
         </p>
 
-        <div id="admin-lista-cortes" class="space-y-2.5">
+        <!-- Formulario para agregar nuevo producto -->
+        <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60 space-y-2.5">
+          <p class="text-xs font-bold uppercase tracking-wider text-amber-950">+ Agregar Nuevo Corte o Producto</p>
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <input type="text" id="nuevo-prod-nombre" placeholder="Nombre del corte (Ej. Costilla ahumada)"
+              class="sm:col-span-5 px-3 py-2 text-xs font-semibold border border-stone-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+            <input type="number" step="0.10" min="0" id="nuevo-prod-precio" placeholder="Precio $/kg (Ej. 7.50)"
+              class="sm:col-span-3 px-3 py-2 text-xs font-bold border border-stone-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+            <button type="button" onclick="agregarProductoAdmin()"
+              class="sm:col-span-4 px-3 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition">
+              + Añadir a la Lista
+            </button>
+          </div>
+          <input type="text" id="nuevo-prod-desc" placeholder="Descripción breve del corte (opcional)"
+            class="w-full px-3 py-2 text-xs border border-stone-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+        </div>
+
+        <!-- Lista editable de productos -->
+        <div id="admin-lista-cortes" class="space-y-3">
           <!-- Controles por producto -->
         </div>
 
-        <div class="pt-2 border-t border-stone-200 flex flex-wrap gap-2 justify-between items-center">
-          <button onclick="restaurarFabrica()" class="text-xs text-red-600 hover:underline font-medium">
+        <div class="pt-3 border-t border-stone-200 flex flex-wrap gap-2 justify-between items-center">
+          <button type="button" onclick="restaurarFabrica()" class="text-xs text-red-600 hover:underline font-medium">
             Restaurar valores del código
           </button>
-          <div class="flex gap-2">
-            <button onclick="copiarCodigoActualizado()" class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-100">
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="copiarCodigoActualizado()" class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-100">
               Copiar Código JS
             </button>
-            <button onclick="guardarCambiosAdmin()" class="px-4 py-2 rounded-xl bg-[#7a1c2e] text-white text-xs font-bold hover:bg-[#5c1624]">
+            <button type="button" onclick="guardarCambiosAdmin()" class="px-4 py-2 rounded-xl bg-[#7a1c2e] text-white text-xs font-bold hover:bg-[#5c1624]">
               Aplicar Cambios
             </button>
           </div>
@@ -369,6 +387,7 @@
     // 1. CONFIGURACIÓN PRINCIPAL (AQUÍ PUEDES EDITAR CLAVE, TELÉFONOS Y CORTES)
     // =========================================================================
     const CLAVE_ADMIN = "alabastro2026";
+    const STORAGE_KEY = "alabastro_catalogo_v3";
 
     const TELEFONOS_DESPACHO = {
       "Maracaibo": "584123103301",
@@ -484,26 +503,41 @@
     // 2. ESTADO Y PERSISTENCIA LOCAL
     // =========================================================================
     let productos = [];
+    let borradorAdmin = [];
     let cantidades = {}; // { id: pesoEnKg }
     let ultimoTextoWhatsApp = "";
     let ultimaZonaSeleccionada = "Maracaibo";
 
+    function normalizarProducto(item, idx = 0) {
+      const slugBase = (item.nombre || `corte-${idx + 1}`)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      return {
+        id: item.id || `${slugBase || "corte"}-${idx + 1}`,
+        nombre: String(item.nombre || "Corte sin nombre").trim(),
+        descripcion: String(item.descripcion || "").trim(),
+        precio: Math.max(0, Number(item.precio) || 0),
+        disponible: item.disponible !== undefined ? Boolean(item.disponible) : true
+      };
+    }
+
     function cargarProductos() {
-      const guardado = localStorage.getItem("alabastro_catalogo_v2");
+      const guardado = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("alabastro_catalogo_v2");
       if (guardado) {
         try {
           const parsed = JSON.parse(guardado);
-          // Sincronizar con PRODUCTOS_BASE por si se agregan nuevos cortes en el código
-          productos = PRODUCTOS_BASE.map(base => {
-            const encontrado = parsed.find(p => p.id === base.id);
-            return encontrado ? { ...base, precio: Number(encontrado.precio), disponible: Boolean(encontrado.disponible) } : { ...base };
-          });
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            productos = parsed.map((p, i) => normalizarProducto(p, i));
+            return;
+          }
         } catch (e) {
-          productos = JSON.parse(JSON.stringify(PRODUCTOS_BASE));
+          // Si falla el parseo, se usa el catálogo base
         }
-      } else {
-        productos = JSON.parse(JSON.stringify(PRODUCTOS_BASE));
       }
+      productos = PRODUCTOS_BASE.map((p, i) => normalizarProducto(p, i));
     }
 
     // =========================================================================
@@ -525,13 +559,13 @@
         return `
           <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="flex-1">
-              <div class="flex items-center gap-2">
-                <h4 class="font-bold text-stone-900 text-sm sm:text-base">${prod.nombre}</h4>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h4 class="font-bold text-stone-900 text-sm sm:text-base">${escaparHTML(prod.nombre)}</h4>
                 <span class="text-xs font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900">
                   $ ${prod.precio.toFixed(2)} / kg
                 </span>
               </div>
-              <p class="text-xs text-stone-500 mt-0.5">${prod.descripcion}</p>
+              ${prod.descripcion ? `<p class="text-xs text-stone-500 mt-0.5">${escaparHTML(prod.descripcion)}</p>` : ""}
             </div>
 
             <div class="flex items-center justify-between sm:justify-end gap-3 bg-stone-50 sm:bg-transparent p-2 sm:p-0 rounded-xl">
@@ -606,8 +640,16 @@
       const tel = TELEFONOS_VISUAL[zona] || "0412-3103301";
       document.getElementById("zona-badge").innerHTML = `
         <span>📲</span>
-        <span>Línea de atención asignada para <strong>${zona}</strong>: <strong>${tel}</strong></span>
+        <span>Línea de atención asignada para <strong>${escaparHTML(zona)}</strong>: <strong>${escaparHTML(tel)}</strong></span>
       `;
+    }
+
+    function escaparHTML(texto) {
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
 
     // =========================================================================
@@ -654,7 +696,7 @@
 
         filasHTML += `
           <tr>
-            <td class="py-2 px-3 font-semibold text-stone-800">${item.nombre}</td>
+            <td class="py-2 px-3 font-semibold text-stone-800">${escaparHTML(item.nombre)}</td>
             <td class="py-2 px-2 text-right text-stone-700">${kg.toFixed(2)} kg</td>
             <td class="py-2 px-2 text-right text-stone-500">$${item.precio.toFixed(2)}</td>
             <td class="py-2 px-3 text-right font-bold text-stone-900">$${sub.toFixed(2)}</td>
@@ -718,16 +760,16 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
           <div class="p-5">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-rose-50 text-[#7a1c2e]">
-                Corte estrella: ${rec.corteNombre}
+                Corte estrella: ${escaparHTML(rec.corteNombre)}
               </span>
               <div class="text-xs text-stone-500 flex items-center gap-3">
-                <span>⏱️ ${rec.tiempo}</span>
-                <span>🍽️ ${rec.porciones}</span>
+                <span>⏱️ ${escaparHTML(rec.tiempo)}</span>
+                <span>🍽️ ${escaparHTML(rec.porciones)}</span>
               </div>
             </div>
 
-            <h3 class="font-serif-brand text-xl font-bold text-stone-900">${rec.titulo}</h3>
-            <p class="text-xs sm:text-sm text-stone-600 mt-1">${rec.resumen}</p>
+            <h3 class="font-serif-brand text-xl font-bold text-stone-900">${escaparHTML(rec.titulo)}</h3>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">${escaparHTML(rec.resumen)}</p>
 
             <div class="mt-4 flex flex-wrap items-center gap-2.5">
               <button onclick="toggleDetalleReceta(${idx})" id="btn-rec-${idx}"
@@ -736,7 +778,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
               </button>
               <button onclick="pedirCorteDeReceta('${rec.corteId}')"
                 class="px-4 py-2 rounded-xl bg-[#7a1c2e] text-white text-xs font-bold hover:bg-[#5c1624] transition">
-                Pedir ${rec.corteNombre} →
+                Pedir ${escaparHTML(rec.corteNombre)} →
               </button>
             </div>
 
@@ -744,7 +786,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
               <div>
                 <h4 class="font-bold text-xs uppercase tracking-wider text-stone-800 mb-2">Ingredientes</h4>
                 <ul class="list-disc list-inside text-xs sm:text-sm text-stone-700 space-y-1">
-                  ${rec.ingredientes.map(ing => `<li>${ing}</li>`).join("")}
+                  ${rec.ingredientes.map(ing => `<li>${escaparHTML(ing)}</li>`).join("")}
                 </ul>
               </div>
               <div>
@@ -753,7 +795,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
                   ${rec.pasos.map((paso, pIdx) => `
                     <li class="flex gap-2.5 text-xs sm:text-sm text-stone-700">
                       <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-900 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">${pIdx + 1}</span>
-                      <span>${paso}</span>
+                      <span>${escaparHTML(paso)}</span>
                     </li>
                   `).join("")}
                 </ol>
@@ -785,7 +827,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
           input.scrollIntoView({ behavior: "smooth", block: "center" });
           input.focus();
         } else {
-          alert("Este corte se encuentra temporalmente oculto en el beneficio actual.");
+          alert("Este corte se encuentra temporalmente oculto o no disponible en este momento.");
         }
       }, 150);
     }
@@ -818,7 +860,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
     }
 
     // =========================================================================
-    // 7. PANEL OCULTO (PUNTO ROJO) PARA PRECIOS Y OCULTAR CORTES
+    // 7. PANEL OCULTO (PUNTO ROJO) PARA AGREGAR, EDITAR, OCULTAR Y ELIMINAR
     // =========================================================================
     function abrirAccesoAdmin() {
       const clave = prompt("Ingresa la clave de gestión:");
@@ -828,29 +870,137 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
         return;
       }
 
+      borradorAdmin = productos.map(p => ({ ...p }));
+      renderizarListaAdmin();
+
+      const modal = document.getElementById("modal-admin");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function sincronizarBorradorDesdeDOM() {
+      borradorAdmin = borradorAdmin.map((prod, idx) => {
+        const nombreEl = document.getElementById(`admin-nombre-${idx}`);
+        const descEl = document.getElementById(`admin-desc-${idx}`);
+        const precioEl = document.getElementById(`admin-precio-${idx}`);
+        const dispEl = document.getElementById(`admin-disp-${idx}`);
+
+        if (!nombreEl) return prod;
+
+        const nuevoNombre = nombreEl.value.trim() || prod.nombre;
+        const nuevaDesc = descEl ? descEl.value.trim() : prod.descripcion;
+        const nuevoPrecio = precioEl ? parseFloat(precioEl.value) : prod.precio;
+        const nuevaDisp = dispEl ? dispEl.checked : prod.disponible;
+
+        return {
+          ...prod,
+          nombre: nuevoNombre,
+          descripcion: nuevaDesc,
+          precio: !isNaN(nuevoPrecio) && nuevoPrecio >= 0 ? nuevoPrecio : prod.precio,
+          disponible: nuevaDisp
+        };
+      });
+    }
+
+    function renderizarListaAdmin() {
       const listaAdmin = document.getElementById("admin-lista-cortes");
-      listaAdmin.innerHTML = productos.map((prod, idx) => `
-        <div class="flex items-center justify-between gap-3 p-3 rounded-xl border ${prod.disponible ? 'border-stone-200 bg-white' : 'border-red-200 bg-red-50/40'}">
-          <div class="flex-1">
-            <p class="font-bold text-xs sm:text-sm text-stone-900">${prod.nombre}</p>
-            <label class="inline-flex items-center gap-1.5 mt-1 cursor-pointer">
+
+      if (borradorAdmin.length === 0) {
+        listaAdmin.innerHTML = `<p class="text-xs text-stone-500 text-center py-4 border border-dashed border-stone-300 rounded-xl">No hay cortes en el catálogo. Usa el formulario superior para agregar uno.</p>`;
+        return;
+      }
+
+      listaAdmin.innerHTML = borradorAdmin.map((prod, idx) => `
+        <div class="p-3.5 rounded-xl border ${prod.disponible ? 'border-stone-200 bg-white' : 'border-red-200 bg-red-50/40'} space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <input type="text" id="admin-nombre-${idx}" value="${escaparHTML(prod.nombre)}" placeholder="Nombre del corte"
+              class="flex-1 px-2.5 py-1.5 text-xs sm:text-sm font-bold text-stone-900 border border-stone-300 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+
+            <div class="flex items-center justify-between sm:justify-end gap-2">
+              <div class="flex items-center gap-1">
+                <span class="text-xs font-bold text-stone-500">$</span>
+                <input type="number" step="0.10" min="0" id="admin-precio-${idx}" value="${prod.precio.toFixed(2)}"
+                  class="w-20 px-2 py-1.5 text-right text-sm font-bold border border-stone-300 rounded-lg bg-white" />
+                <span class="text-[11px] text-stone-500 font-semibold">/kg</span>
+              </div>
+
+              <button type="button" onclick="eliminarProductoAdmin(${idx})" title="Eliminar producto"
+                class="px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition">
+                🗑 Eliminar
+              </button>
+            </div>
+          </div>
+
+          <input type="text" id="admin-desc-${idx}" value="${escaparHTML(prod.descripcion)}" placeholder="Descripción del corte..."
+            class="w-full px-2.5 py-1.5 text-xs text-stone-600 border border-stone-200 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+
+          <div class="flex items-center justify-between pt-0.5">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
               <input type="checkbox" id="admin-disp-${idx}" ${prod.disponible ? "checked" : ""} class="rounded text-[#7a1c2e] focus:ring-[#7a1c2e]">
               <span class="text-xs font-medium ${prod.disponible ? 'text-emerald-700' : 'text-red-600'}">
                 ${prod.disponible ? "Visible al cliente" : "Oculto en este beneficio"}
               </span>
             </label>
-          </div>
-          <div class="flex items-center gap-1">
-            <span class="text-xs font-bold text-stone-500">$</span>
-            <input type="number" step="0.10" id="admin-precio-${idx}" value="${prod.precio.toFixed(2)}"
-              class="w-20 px-2 py-1.5 text-right text-sm font-bold border border-stone-300 rounded-lg" />
+            <span class="text-[10px] text-stone-400">ID: ${escaparHTML(prod.id)}</span>
           </div>
         </div>
       `).join("");
+    }
 
-      const modal = document.getElementById("modal-admin");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
+    function agregarProductoAdmin() {
+      sincronizarBorradorDesdeDOM();
+
+      const nombreInput = document.getElementById("nuevo-prod-nombre");
+      const precioInput = document.getElementById("nuevo-prod-precio");
+      const descInput = document.getElementById("nuevo-prod-desc");
+
+      const nombre = nombreInput.value.trim();
+      const precio = parseFloat(precioInput.value);
+      const descripcion = descInput.value.trim();
+
+      if (!nombre) {
+        alert("Ingresa el nombre del nuevo corte.");
+        nombreInput.focus();
+        return;
+      }
+      if (isNaN(precio) || precio <= 0) {
+        alert("Ingresa un precio válido mayor a 0 en divisas ($/kg).");
+        precioInput.focus();
+        return;
+      }
+
+      const slug = nombre
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") || "corte";
+
+      const idUnico = `${slug}-${Date.now().toString().slice(-4)}`;
+
+      borradorAdmin.push({
+        id: idUnico,
+        nombre,
+        descripcion,
+        precio,
+        disponible: true
+      });
+
+      nombreInput.value = "";
+      precioInput.value = "";
+      descInput.value = "";
+
+      renderizarListaAdmin();
+    }
+
+    function eliminarProductoAdmin(idx) {
+      sincronizarBorradorDesdeDOM();
+      const objetivo = borradorAdmin[idx];
+      if (!objetivo) return;
+      if (!confirm(`¿Eliminar "${objetivo.nombre}" del catálogo?`)) return;
+
+      borradorAdmin.splice(idx, 1);
+      renderizarListaAdmin();
     }
 
     function cerrarModalAdmin() {
@@ -860,37 +1010,40 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
     }
 
     function guardarCambiosAdmin() {
-      productos = productos.map((prod, idx) => {
-        const nuevoPrecio = parseFloat(document.getElementById(`admin-precio-${idx}`).value);
-        const nuevaDisp = document.getElementById(`admin-disp-${idx}`).checked;
-        if (!nuevaDisp) {
-          delete cantidades[prod.id];
+      sincronizarBorradorDesdeDOM();
+      productos = borradorAdmin.map((p, i) => normalizarProducto(p, i));
+
+      // Limpiar cantidades de productos eliminados u ocultos
+      const idsVigentes = new Set(productos.filter(p => p.disponible).map(p => p.id));
+      Object.keys(cantidades).forEach(id => {
+        if (!idsVigentes.has(id)) {
+          delete cantidades[id];
         }
-        return {
-          ...prod,
-          precio: !isNaN(nuevoPrecio) && nuevoPrecio >= 0 ? nuevoPrecio : prod.precio,
-          disponible: nuevaDisp
-        };
       });
 
-      localStorage.setItem("alabastro_catalogo_v2", JSON.stringify(productos));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(productos));
       renderizarCatalogo();
       recalcularTotales();
       cerrarModalAdmin();
-      alert("Precios y visibilidad actualizados correctamente.");
+      alert("Catálogo actualizado correctamente.");
     }
 
     function restaurarFabrica() {
-      if (!confirm("¿Restaurar los precios y visibilidad originales del código?")) return;
+      if (!confirm("¿Restaurar los cortes, descripciones, precios y visibilidad originales del código?")) return;
+      localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem("alabastro_catalogo_v2");
+      cantidades = {};
       cargarProductos();
+      borradorAdmin = productos.map(p => ({ ...p }));
       renderizarCatalogo();
       recalcularTotales();
       cerrarModalAdmin();
     }
 
     function copiarCodigoActualizado() {
-      const bloque = "const PRODUCTOS_BASE = " + JSON.stringify(productos, null, 2) + ";";
+      sincronizarBorradorDesdeDOM();
+      const listaParaCodigo = borradorAdmin.map((p, i) => normalizarProducto(p, i));
+      const bloque = "const PRODUCTOS_BASE = " + JSON.stringify(listaParaCodigo, null, 2) + ";";
       navigator.clipboard.writeText(bloque).then(() => {
         alert("Bloque PRODUCTOS_BASE copiado. Pégalo en tu archivo index.html en GitHub para que los cambios sean permanentes para todos los clientes.");
       });
