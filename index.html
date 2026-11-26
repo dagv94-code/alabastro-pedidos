@@ -30,15 +30,20 @@
       background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
       background-size: 16px 16px;
     }
+    /* Marco uniforme para todas las imágenes del catálogo */
+    .product-photo-frame {
+      background-color: #ffffff;
+      border: 1px solid #e7e5e4;
+      box-shadow: 0 2px 6px rgba(28, 25, 23, 0.06);
+    }
   </style>
 </head>
 <body class="pb-28">
 
-  <!-- ENCABEZADO CORPORATIVO (SIN LOGO PROVISIONAL) -->
+  <!-- ENCABEZADO CORPORATIVO -->
   <header class="bg-gradient-to-r from-[#5c1624] via-[#7a1c2e] to-[#4a101b] text-white shadow-lg sticky top-0 z-40">
     <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
       <div>
-        <!-- ESPACIO RESERVADO PARA LOGO OFICIAL DE AGROPECUARIA ALABASTRO -->
         <p class="text-[11px] uppercase tracking-[0.22em] text-amber-200/90 font-semibold">Municipio Mara · Zulia</p>
         <h1 class="font-serif-brand text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
           Agropecuaria Alabastro
@@ -52,7 +57,7 @@
       </div>
     </div>
 
-    <!-- NAVEGACIÓN PRINCIPAL (INICIA DIRECTO EN PEDIDOS AL ESCANEAR EL QR) -->
+    <!-- NAVEGACIÓN PRINCIPAL -->
     <nav class="bg-black/20 border-t border-white/10">
       <div class="max-w-4xl mx-auto px-2 flex">
         <button onclick="cambiarTab('pedido')" id="tab-btn-pedido" class="flex-1 py-2.5 px-2 text-xs sm:text-sm font-bold border-b-2 border-amber-400 text-amber-300 transition flex items-center justify-center gap-1.5">
@@ -71,7 +76,7 @@
   <main class="max-w-4xl mx-auto px-4 pt-5">
 
     <!-- ===================================================================== -->
-    <!-- SECCIÓN 1: SOLICITUD DE DESPACHO (VISTA INICIAL AL ESCANEAR EL QR)    -->
+    <!-- SECCIÓN 1: SOLICITUD DE DESPACHO                                      -->
     <!-- ===================================================================== -->
     <section id="sec-pedido" class="space-y-5">
 
@@ -81,7 +86,7 @@
         <div>
           <h2 class="text-sm font-bold text-amber-950">Solicitud de Despacho Directo de Granja</h2>
           <p class="text-xs text-amber-900/80 mt-0.5 leading-relaxed">
-            Completa tus datos de entrega, indica los kilos que deseas en los cortes disponibles y genera tu solicitud de despacho directa a nuestro WhatsApp. Precios expresados en <strong>Divisas ($ USD)</strong>.
+            Completa tus datos de entrega, indica los kilos que deseas en los cortes disponibles y genera tu solicitud de despacho directa a nuestro WhatsApp. Toca la imagen de cualquier corte para verla en detalle. Precios en <strong>Divisas ($ USD)</strong>.
           </p>
         </div>
       </div>
@@ -129,7 +134,7 @@
         </div>
       </div>
 
-      <!-- PASO 2: CATÁLOGO DE CORTES (INGRESO DIRECTO DE PESO EN KG) -->
+      <!-- PASO 2: CATÁLOGO DE CORTES -->
       <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 sm:p-5">
         <div class="flex items-center justify-between mb-4 pb-2.5 border-b border-stone-100">
           <div class="flex items-center gap-2">
@@ -149,7 +154,7 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- SECCIÓN 2: RECETARIO ALABASTRO (ESTILO COOKPAD PASO A PASO)           -->
+    <!-- SECCIÓN 2: RECETARIO ALABASTRO                                        -->
     <!-- ===================================================================== -->
     <section id="sec-recetas" class="hidden space-y-5">
       <div class="bg-white rounded-2xl border border-stone-200 p-5 shadow-sm">
@@ -200,7 +205,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-100">
             <h4 class="font-bold text-sm text-[#7a1c2e]">⚖️ Trabajo Honesto</h4>
-            <p class="text-xs text-stone-600 mt-1 leading-relaxed">Hacemos cada etapa de la producción con dedicación y transparencia, cumpliendo siempre con el peso justo y la calidad que prometemos.</p>
+            <p class="text-xs text-stone-600 mt-1 leading-relaxed">Hacemos cada etapa de la producción con dedicación y transparencia, cumpliendo siempre con la calidad que prometemos.</p>
           </div>
           <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-100">
             <h4 class="font-bold text-sm text-[#7a1c2e]">🧼 Higiene y Cuidado</h4>
@@ -257,7 +262,6 @@
   <!-- ===================================================================== -->
   <div id="modal-recibo" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden my-auto border border-stone-200">
-      <!-- Cabecera del recibo -->
       <div class="bg-[#5c1624] text-white px-5 py-4 flex items-center justify-between">
         <div>
           <p class="text-[10px] uppercase tracking-widest text-amber-200">Agropecuaria Alabastro</p>
@@ -266,7 +270,6 @@
         <button onclick="cerrarModalRecibo()" class="text-white/80 hover:text-white text-xl font-bold px-2">✕</button>
       </div>
 
-      <!-- Cuerpo tipo nota de entrega -->
       <div class="p-5 receipt-paper space-y-4 text-xs sm:text-sm">
         <div class="bg-white/95 p-3.5 rounded-xl border border-stone-200 space-y-1.5">
           <div class="flex justify-between text-xs text-stone-500">
@@ -280,7 +283,6 @@
           <p><span class="text-stone-500">Punto de Ref.:</span> <span id="recibo-referencia" class="text-stone-800"></span></p>
         </div>
 
-        <!-- Tabla de productos -->
         <div class="bg-white/95 rounded-xl border border-stone-200 overflow-hidden">
           <table class="w-full text-left border-collapse">
             <thead>
@@ -310,7 +312,6 @@
         </p>
       </div>
 
-      <!-- Acciones -->
       <div class="p-4 bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row gap-2.5">
         <button onclick="copiarTextoPedido()" class="flex-1 py-2.5 px-4 rounded-xl border border-stone-300 bg-white hover:bg-stone-100 text-stone-700 font-semibold text-xs transition">
           📋 Copiar Detalle
@@ -330,14 +331,14 @@
       <div class="bg-stone-900 text-white px-5 py-4 flex items-center justify-between">
         <div>
           <p class="text-[10px] uppercase tracking-widest text-red-400 font-bold">Panel Privado · Agropecuaria Alabastro</p>
-          <h3 class="font-bold text-base">Gestión de Cortes, Precios y Disponibilidad</h3>
+          <h3 class="font-bold text-base">Gestión de Cortes, Fotos, Precios y Disponibilidad</h3>
         </div>
         <button onclick="cerrarModalAdmin()" class="text-white/70 hover:text-white text-xl font-bold px-2">✕</button>
       </div>
 
-      <div class="p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+      <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
         <p class="text-xs text-stone-600 bg-stone-100 p-3 rounded-xl">
-          Agrega nuevos cortes, edita <strong>nombre, descripción o precio ($/kg)</strong>, oculta temporalmente o elimina productos. Al pulsar <strong>Aplicar Cambios</strong> se guarda en este dispositivo; usa <strong>Copiar Código JS</strong> si deseas fijar los cambios permanentemente en GitHub.
+          Agrega nuevos cortes, edita <strong>nombre, descripción, precio ($/kg) o fotografía referencial</strong>, oculta temporalmente o elimina productos. Puedes subir una foto desde tu dispositivo con <strong>📷 Foto</strong> (no requiere carpetas externas).
         </p>
 
         <!-- Formulario para agregar nuevo producto -->
@@ -380,14 +381,34 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- CONFIGURACIÓN Y LÓGICA JAVASCRIPT (FÁCIL DE EDITAR EN EL CÓDIGO)      -->
+  <!-- MODAL 3: VISTA PREVIA AMPLIADA DE FOTO DEL CORTE                      -->
+  <!-- ===================================================================== -->
+  <div id="modal-foto" onclick="cerrarModalFoto()" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div onclick="event.stopPropagation()" class="bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden border border-stone-200">
+      <div class="bg-white p-4 flex items-center justify-center border-b border-stone-100 relative">
+        <button onclick="cerrarModalFoto()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-sm flex items-center justify-center">✕</button>
+        <img id="modal-foto-img" src="" alt="" class="w-64 h-64 object-contain rounded-xl bg-white" />
+      </div>
+      <div class="p-4 space-y-1.5">
+        <div class="flex items-center justify-between gap-2">
+          <h4 id="modal-foto-titulo" class="font-bold text-base text-stone-900"></h4>
+          <span id="modal-foto-precio" class="text-xs font-extrabold px-2.5 py-1 rounded-md bg-amber-100 text-amber-900"></span>
+        </div>
+        <p id="modal-foto-desc" class="text-xs text-stone-600 leading-relaxed"></p>
+        <p class="text-[10px] text-stone-400 pt-1">Imagen referencial del corte fresco · Agropecuaria Alabastro</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CONFIGURACIÓN Y LÓGICA JAVASCRIPT                                     -->
   <!-- ===================================================================== -->
   <script>
     // =========================================================================
-    // 1. CONFIGURACIÓN PRINCIPAL (AQUÍ PUEDES EDITAR CLAVE, TELÉFONOS Y CORTES)
+    // 1. CONFIGURACIÓN PRINCIPAL (CLAVE, TELÉFONOS Y CORTES)
     // =========================================================================
     const CLAVE_ADMIN = "alabastro2026";
-    const STORAGE_KEY = "alabastro_catalogo_v3";
+    const STORAGE_KEY = "alabastro_catalogo_v5";
 
     const TELEFONOS_DESPACHO = {
       "Maracaibo": "584123103301",
@@ -401,22 +422,69 @@
       "Mara": "0412-6991653"
     };
 
-    // CATÁLOGO DE CORTES:
-    // - precio: valor en divisas ($ USD) por kilo
-    // - disponible: true = se muestra al cliente | false = oculto en este beneficio
+    // Imagen referencial limpia y uniforme en SVG sin depender de carpetas externas
+    function generarImagenReferencial(nombre, tipoCorte = "") {
+      const etiqueta = (nombre || "CORTE").slice(0, 20).toUpperCase();
+      const clave = `${nombre} ${tipoCorte}`.toLowerCase();
+
+      let trazoCorte = `<path d="M84 114c6-20 42-26 62-10 14 11 10 30-12 36-24 6-54-6-50-26z" fill="#e07a88" stroke="#b84a5a" stroke-width="2"/>
+        <ellipse cx="132" cy="112" rx="7" ry="5" fill="#fff8f8" stroke="#c96473" stroke-width="1.5"/>`;
+
+      if (clave.includes("costilla")) {
+        trazoCorte = `<rect x="76" y="84" width="88" height="46" rx="10" fill="#e38290" stroke="#b84a5a" stroke-width="2"/>
+          <line x1="94" y1="86" x2="94" y2="128" stroke="#fff7f7" stroke-width="4" stroke-linecap="round"/>
+          <line x1="112" y1="86" x2="112" y2="128" stroke="#fff7f7" stroke-width="4" stroke-linecap="round"/>
+          <line x1="130" y1="86" x2="130" y2="128" stroke="#fff7f7" stroke-width="4" stroke-linecap="round"/>
+          <line x1="148" y1="86" x2="148" y2="128" stroke="#fff7f7" stroke-width="4" stroke-linecap="round"/>`;
+      } else if (clave.includes("pernil")) {
+        trazoCorte = `<path d="M76 118c4-24 38-34 68-22 14 6 22 14 26 20l14 4c5 2 5 8 0 10l-15 3c-10 12-32 16-58 14-22-2-36-12-34-29z" fill="#e89a9e" stroke="#b85a62" stroke-width="2"/>`;
+      } else if (clave.includes("lomo")) {
+        trazoCorte = `<rect x="74" y="92" width="92" height="34" rx="16" fill="#e58795" stroke="#b84a5a" stroke-width="2"/>
+          <ellipse cx="82" cy="109" rx="6" ry="12" fill="#f7c6cd" stroke="#b84a5a" stroke-width="1.5"/>`;
+      } else if (clave.includes("panceta")) {
+        trazoCorte = `<rect x="76" y="88" width="88" height="40" rx="8" fill="#f4d5ce" stroke="#b86b68" stroke-width="2"/>
+          <line x1="78" y1="98" x2="162" y2="98" stroke="#df7684" stroke-width="5"/>
+          <line x1="78" y1="108" x2="162" y2="108" stroke="#f7ded8" stroke-width="5"/>
+          <line x1="78" y1="118" x2="162" y2="118" stroke="#df7684" stroke-width="5"/>`;
+      } else if (clave.includes("recorte")) {
+        trazoCorte = `<rect x="82" y="88" width="28" height="22" rx="6" fill="#df7684" stroke="#b84a5a" stroke-width="1.5"/>
+          <rect x="116" y="86" width="32" height="24" rx="7" fill="#e8919d" stroke="#b84a5a" stroke-width="1.5"/>
+          <rect x="92" y="114" width="34" height="20" rx="6" fill="#d86878" stroke="#b84a5a" stroke-width="1.5"/>
+          <rect x="130" y="113" width="24" height="19" rx="5" fill="#e48592" stroke="#b84a5a" stroke-width="1.5"/>`;
+      } else if (clave.includes("paticas")) {
+        trazoCorte = `<path d="M86 130l12-34c2-6 10-4 9 2l-8 32z" fill="#f3cdc8" stroke="#b86b68" stroke-width="1.8"/>
+          <path d="M112 130l12-34c2-6 10-4 9 2l-8 32z" fill="#f3cdc8" stroke="#b86b68" stroke-width="1.8"/>
+          <path d="M138 130l10-28c2-5 9-3 8 2l-7 26z" fill="#f3cdc8" stroke="#b86b68" stroke-width="1.8"/>`;
+      } else if (clave.includes("canal")) {
+        trazoCorte = `<path d="M98 76c18 0 36 16 36 34 0 18-12 28-14 42h-22c-2-14-14-24-14-42 0-18 0-34 14-34z" fill="#f0b7b9" stroke="#a9535c" stroke-width="2"/>
+          <line x1="109" y1="80" x2="109" y2="148" stroke="#fff7f7" stroke-width="3" stroke-dasharray="4 3"/>`;
+      }
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+        <rect width="240" height="240" fill="#ffffff"/>
+        <rect x="10" y="10" width="220" height="220" rx="18" fill="#fcfbfa" stroke="#ebe7e4" stroke-width="2"/>
+        <circle cx="120" cy="108" r="46" fill="#fdf2f4"/>
+        ${trazoCorte}
+        <text x="120" y="176" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#5c1624" text-anchor="middle">${etiqueta}</text>
+        <text x="120" y="193" font-family="Inter, Arial, sans-serif" font-size="8.5" font-weight="600" letter-spacing="0.8" fill="#78716c" text-anchor="middle">AGROPECUARIA ALABASTRO</text>
+      </svg>`;
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    // CATÁLOGO DE CORTES (AUTÓNOMO, SIN CARPETAS EXTERNAS)
     const PRODUCTOS_BASE = [
-      { id: "chuleton", nombre: "Chuletón", descripcion: "Corte grueso y jugoso, ideal para parrilla o plancha.", precio: 7.00, disponible: true },
-      { id: "chuleta-lomo", nombre: "Chuleta de lomo", descripcion: "Tierna y magra, perfecta para freír o asar.", precio: 7.00, disponible: true },
-      { id: "lomo", nombre: "Lomo de cerdo", descripcion: "Pieza limpia sin hueso, excelente para hornear o medallones.", precio: 7.50, disponible: true },
-      { id: "pernil", nombre: "Pernil entero", descripcion: "Pieza tradicional jugosa para hornear en ocasiones especiales.", precio: 7.00, disponible: true },
-      { id: "costilla", nombre: "Costilla de cerdo", descripcion: "Carnuda y con excelente marmoleo para horno o BBQ.", precio: 7.00, disponible: true },
-      { id: "panceta", nombre: "Panceta", descripcion: "Corte con piel y capas ideales para chicharrón crocante.", precio: 7.00, disponible: true },
-      { id: "recorte", nombre: "Recorte para freír", descripcion: "Trozos seleccionados listos para freír o guisar.", precio: 4.00, disponible: true },
-      { id: "paticas", nombre: "Paticas de cerdo", descripcion: "Limpias y frescas para sopas, sancochos y guisos.", precio: 3.50, disponible: true },
-      { id: "canal", nombre: "Cerdo en canal", descripcion: "Venta al mayor por canal completo o medio canal.", precio: 4.80, disponible: true }
+      { id: "chuleton", nombre: "Chuletón", descripcion: "Corte grueso y jugoso, ideal para parrilla o plancha.", precio: 7.00, disponible: true, imagen: "" },
+      { id: "chuleta-lomo", nombre: "Chuleta de lomo", descripcion: "Tierna y magra, perfecta para freír o asar.", precio: 7.00, disponible: true, imagen: "" },
+      { id: "lomo", nombre: "Lomo de cerdo", descripcion: "Pieza limpia sin hueso, excelente para hornear o medallones.", precio: 7.50, disponible: true, imagen: "" },
+      { id: "pernil", nombre: "Pernil entero", descripcion: "Pieza tradicional jugosa para hornear en ocasiones especiales.", precio: 7.00, disponible: true, imagen: "" },
+      { id: "costilla", nombre: "Costilla de cerdo", descripcion: "Carnuda y con excelente marmoleo para horno o BBQ.", precio: 7.00, disponible: true, imagen: "" },
+      { id: "panceta", nombre: "Panceta", descripcion: "Corte con piel y capas ideales para chicharrón crocante.", precio: 7.00, disponible: true, imagen: "" },
+      { id: "recorte", nombre: "Recorte para freír", descripcion: "Trozos seleccionados listos para freír o guisar.", precio: 4.00, disponible: true, imagen: "" },
+      { id: "paticas", nombre: "Paticas de cerdo", descripcion: "Limpias y frescas para sopas, sancochos y guisos.", precio: 3.50, disponible: true, imagen: "" },
+      { id: "canal", nombre: "Cerdo en canal", descripcion: "Venta al mayor por canal completo o medio canal.", precio: 4.80, disponible: true, imagen: "" }
     ];
 
-    // RECETAS PASO A PASO (ESTILO COOKPAD)
+    // RECETAS PASO A PASO
     const RECETAS_ALABASTRO = [
       {
         id: "rec-pernil",
@@ -508,6 +576,13 @@
     let ultimoTextoWhatsApp = "";
     let ultimaZonaSeleccionada = "Maracaibo";
 
+    function obtenerImagenEfectiva(prod) {
+      if (prod && typeof prod.imagen === "string" && prod.imagen.trim() !== "") {
+        return prod.imagen.trim();
+      }
+      return generarImagenReferencial(prod ? prod.nombre : "Corte", prod ? prod.descripcion : "");
+    }
+
     function normalizarProducto(item, idx = 0) {
       const slugBase = (item.nombre || `corte-${idx + 1}`)
         .toLowerCase()
@@ -515,17 +590,23 @@
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
+      const idFinal = item.id || `${slugBase || "corte"}-${idx + 1}`;
+      const imgRaw = (item.imagen && String(item.imagen).trim()) ? String(item.imagen).trim() : "";
+      // Evitar rutas rotas a carpetas inexistentes si no existe carpeta img
+      const imagenLimpia = imgRaw.startsWith("img/") ? "" : imgRaw;
+
       return {
-        id: item.id || `${slugBase || "corte"}-${idx + 1}`,
+        id: idFinal,
         nombre: String(item.nombre || "Corte sin nombre").trim(),
         descripcion: String(item.descripcion || "").trim(),
         precio: Math.max(0, Number(item.precio) || 0),
-        disponible: item.disponible !== undefined ? Boolean(item.disponible) : true
+        disponible: item.disponible !== undefined ? Boolean(item.disponible) : true,
+        imagen: imagenLimpia
       };
     }
 
     function cargarProductos() {
-      const guardado = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("alabastro_catalogo_v2");
+      const guardado = localStorage.getItem(STORAGE_KEY);
       if (guardado) {
         try {
           const parsed = JSON.parse(guardado);
@@ -540,8 +621,20 @@
       productos = PRODUCTOS_BASE.map((p, i) => normalizarProducto(p, i));
     }
 
+    function escaparHTML(texto) {
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function escaparAttr(texto) {
+      return String(texto || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+
     // =========================================================================
-    // 3. RENDERIZADO DE CATÁLOGO Y CÁLCULO EN TIEMPO REAL
+    // 3. RENDERIZADO DE CATÁLOGO CON IMAGEN REFERENCIAL UNIFICADA
     // =========================================================================
     function renderizarCatalogo() {
       const contenedor = document.getElementById("lista-cortes-container");
@@ -555,20 +648,38 @@
       contenedor.innerHTML = visibles.map(prod => {
         const pesoActual = cantidades[prod.id] || "";
         const subtotal = (parseFloat(pesoActual) || 0) * prod.precio;
+        const srcImg = obtenerImagenEfectiva(prod);
+        const respaldo = generarImagenReferencial(prod.nombre, prod.descripcion);
 
         return `
           <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 flex-wrap">
-                <h4 class="font-bold text-stone-900 text-sm sm:text-base">${escaparHTML(prod.nombre)}</h4>
-                <span class="text-xs font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900">
-                  $ ${prod.precio.toFixed(2)} / kg
+            <div class="flex items-center gap-3.5 flex-1 min-w-0">
+              <button type="button" onclick="abrirModalFoto('${escaparAttr(prod.id)}')" title="Ver imagen referencial"
+                class="product-photo-frame w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-1 relative group cursor-zoom-in transition hover:border-[#7a1c2e]/50">
+                <img
+                  src="${srcImg}"
+                  alt="${escaparHTML(prod.nombre)}"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='${respaldo}';"
+                  class="w-full h-full object-contain rounded-lg"
+                />
+                <span class="absolute bottom-1 right-1 bg-black/55 text-white text-[9px] px-1.5 py-0.5 rounded-md opacity-85 group-hover:opacity-100">
+                  🔍
                 </span>
+              </button>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-bold text-stone-900 text-sm sm:text-base leading-snug">${escaparHTML(prod.nombre)}</h4>
+                  <span class="text-xs font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 whitespace-nowrap">
+                    $ ${prod.precio.toFixed(2)} / kg
+                  </span>
+                </div>
+                ${prod.descripcion ? `<p class="text-xs text-stone-500 mt-1 leading-relaxed">${escaparHTML(prod.descripcion)}</p>` : ""}
               </div>
-              ${prod.descripcion ? `<p class="text-xs text-stone-500 mt-0.5">${escaparHTML(prod.descripcion)}</p>` : ""}
             </div>
 
-            <div class="flex items-center justify-between sm:justify-end gap-3 bg-stone-50 sm:bg-transparent p-2 sm:p-0 rounded-xl">
+            <div class="flex items-center justify-between sm:justify-end gap-3 bg-stone-50 sm:bg-transparent p-2.5 sm:p-0 rounded-xl shrink-0">
               <div class="flex items-center gap-1.5">
                 <label for="peso-${prod.id}" class="text-xs font-semibold text-stone-600">Kg:</label>
                 <input 
@@ -594,6 +705,34 @@
           </div>
         `;
       }).join("");
+    }
+
+    function abrirModalFoto(prodId) {
+      const prod = productos.find(p => p.id === prodId);
+      if (!prod) return;
+
+      const imgEl = document.getElementById("modal-foto-img");
+      const respaldo = generarImagenReferencial(prod.nombre, prod.descripcion);
+      imgEl.onerror = function() {
+        this.onerror = null;
+        this.src = respaldo;
+      };
+      imgEl.src = obtenerImagenEfectiva(prod);
+      imgEl.alt = prod.nombre;
+
+      document.getElementById("modal-foto-titulo").textContent = prod.nombre;
+      document.getElementById("modal-foto-precio").textContent = `$ ${prod.precio.toFixed(2)} / kg`;
+      document.getElementById("modal-foto-desc").textContent = prod.descripcion || "Corte fresco seleccionado de Agropecuaria Alabastro.";
+
+      const modal = document.getElementById("modal-foto");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function cerrarModalFoto() {
+      const modal = document.getElementById("modal-foto");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
     }
 
     function actualizarPeso(id, valor) {
@@ -642,14 +781,6 @@
         <span>📲</span>
         <span>Línea de atención asignada para <strong>${escaparHTML(zona)}</strong>: <strong>${escaparHTML(tel)}</strong></span>
       `;
-    }
-
-    function escaparHTML(texto) {
-      return String(texto)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
     }
 
     // =========================================================================
@@ -860,7 +991,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
     }
 
     // =========================================================================
-    // 7. PANEL OCULTO (PUNTO ROJO) PARA AGREGAR, EDITAR, OCULTAR Y ELIMINAR
+    // 7. PANEL OCULTO (PUNTO ROJO) PARA AGREGAR, EDITAR, FOTOS Y ELIMINAR
     // =========================================================================
     function abrirAccesoAdmin() {
       const clave = prompt("Ingresa la clave de gestión:");
@@ -902,6 +1033,47 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
       });
     }
 
+    function cargarFotoArchivoAdmin(idx, inputEl) {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const size = 360;
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, size, size);
+
+          const scale = Math.min((size - 24) / img.width, (size - 24) / img.height);
+          const w = img.width * scale;
+          const h = img.height * scale;
+          ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          sincronizarBorradorDesdeDOM();
+          if (borradorAdmin[idx]) {
+            borradorAdmin[idx].imagen = dataUrl;
+            renderizarListaAdmin();
+          }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function limpiarFotoAdmin(idx) {
+      sincronizarBorradorDesdeDOM();
+      if (borradorAdmin[idx]) {
+        borradorAdmin[idx].imagen = "";
+        renderizarListaAdmin();
+      }
+    }
+
     function renderizarListaAdmin() {
       const listaAdmin = document.getElementById("admin-lista-cortes");
 
@@ -910,41 +1082,64 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
         return;
       }
 
-      listaAdmin.innerHTML = borradorAdmin.map((prod, idx) => `
-        <div class="p-3.5 rounded-xl border ${prod.disponible ? 'border-stone-200 bg-white' : 'border-red-200 bg-red-50/40'} space-y-2.5">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <input type="text" id="admin-nombre-${idx}" value="${escaparHTML(prod.nombre)}" placeholder="Nombre del corte"
-              class="flex-1 px-2.5 py-1.5 text-xs sm:text-sm font-bold text-stone-900 border border-stone-300 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+      listaAdmin.innerHTML = borradorAdmin.map((prod, idx) => {
+        const srcImg = obtenerImagenEfectiva(prod);
+        const respaldo = generarImagenReferencial(prod.nombre, prod.descripcion);
+        const tieneFotoPersonalizada = Boolean(prod.imagen && prod.imagen.trim() !== "");
 
-            <div class="flex items-center justify-between sm:justify-end gap-2">
-              <div class="flex items-center gap-1">
-                <span class="text-xs font-bold text-stone-500">$</span>
-                <input type="number" step="0.10" min="0" id="admin-precio-${idx}" value="${prod.precio.toFixed(2)}"
-                  class="w-20 px-2 py-1.5 text-right text-sm font-bold border border-stone-300 rounded-lg bg-white" />
-                <span class="text-[11px] text-stone-500 font-semibold">/kg</span>
+        return `
+          <div class="p-3.5 rounded-xl border ${prod.disponible ? 'border-stone-200 bg-white' : 'border-red-200 bg-red-50/40'} space-y-2.5">
+            <div class="flex items-start gap-3">
+              <div class="shrink-0 flex flex-col items-center gap-1">
+                <div class="w-16 h-16 rounded-xl border border-stone-200 bg-white p-1 flex items-center justify-center overflow-hidden">
+                  <img src="${srcImg}" alt="${escaparHTML(prod.nombre)}"
+                    onerror="this.onerror=null; this.src='${respaldo}';"
+                    class="w-full h-full object-contain rounded-lg" />
+                </div>
+                <label class="cursor-pointer text-[10px] font-bold text-[#7a1c2e] hover:underline">
+                  📷 Foto
+                  <input type="file" accept="image/*" onchange="cargarFotoArchivoAdmin(${idx}, this)" class="hidden" />
+                </label>
+                ${tieneFotoPersonalizada ? `<button type="button" onclick="limpiarFotoAdmin(${idx})" class="text-[9px] text-stone-500 hover:text-red-600">Quitar foto</button>` : ""}
               </div>
 
-              <button type="button" onclick="eliminarProductoAdmin(${idx})" title="Eliminar producto"
-                class="px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition">
-                🗑 Eliminar
-              </button>
+              <div class="flex-1 space-y-2 min-w-0">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <input type="text" id="admin-nombre-${idx}" value="${escaparHTML(prod.nombre)}" placeholder="Nombre del corte"
+                    class="flex-1 px-2.5 py-1.5 text-xs sm:text-sm font-bold text-stone-900 border border-stone-300 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+
+                  <div class="flex items-center justify-between sm:justify-end gap-2">
+                    <div class="flex items-center gap-1">
+                      <span class="text-xs font-bold text-stone-500">$</span>
+                      <input type="number" step="0.10" min="0" id="admin-precio-${idx}" value="${prod.precio.toFixed(2)}"
+                        class="w-20 px-2 py-1.5 text-right text-sm font-bold border border-stone-300 rounded-lg bg-white" />
+                      <span class="text-[11px] text-stone-500 font-semibold">/kg</span>
+                    </div>
+
+                    <button type="button" onclick="eliminarProductoAdmin(${idx})" title="Eliminar producto"
+                      class="px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition">
+                      🗑
+                    </button>
+                  </div>
+                </div>
+
+                <input type="text" id="admin-desc-${idx}" value="${escaparHTML(prod.descripcion)}" placeholder="Descripción del corte..."
+                  class="w-full px-2.5 py-1.5 text-xs text-stone-600 border border-stone-200 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-0.5 border-t border-stone-100">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" id="admin-disp-${idx}" ${prod.disponible ? "checked" : ""} class="rounded text-[#7a1c2e] focus:ring-[#7a1c2e]">
+                <span class="text-xs font-medium ${prod.disponible ? 'text-emerald-700' : 'text-red-600'}">
+                  ${prod.disponible ? "Visible al cliente" : "Oculto en este beneficio"}
+                </span>
+              </label>
+              <span class="text-[10px] text-stone-400">ID: ${escaparHTML(prod.id)}</span>
             </div>
           </div>
-
-          <input type="text" id="admin-desc-${idx}" value="${escaparHTML(prod.descripcion)}" placeholder="Descripción del corte..."
-            class="w-full px-2.5 py-1.5 text-xs text-stone-600 border border-stone-200 rounded-lg bg-stone-50/50 focus:outline-none focus:ring-2 focus:ring-[#7a1c2e]" />
-
-          <div class="flex items-center justify-between pt-0.5">
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="admin-disp-${idx}" ${prod.disponible ? "checked" : ""} class="rounded text-[#7a1c2e] focus:ring-[#7a1c2e]">
-              <span class="text-xs font-medium ${prod.disponible ? 'text-emerald-700' : 'text-red-600'}">
-                ${prod.disponible ? "Visible al cliente" : "Oculto en este beneficio"}
-              </span>
-            </label>
-            <span class="text-[10px] text-stone-400">ID: ${escaparHTML(prod.id)}</span>
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     }
 
     function agregarProductoAdmin() {
@@ -983,7 +1178,8 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
         nombre,
         descripcion,
         precio,
-        disponible: true
+        disponible: true,
+        imagen: ""
       });
 
       nombreInput.value = "";
@@ -1013,7 +1209,6 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
       sincronizarBorradorDesdeDOM();
       productos = borradorAdmin.map((p, i) => normalizarProducto(p, i));
 
-      // Limpiar cantidades de productos eliminados u ocultos
       const idsVigentes = new Set(productos.filter(p => p.disponible).map(p => p.id));
       Object.keys(cantidades).forEach(id => {
         if (!idsVigentes.has(id)) {
@@ -1021,7 +1216,11 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
         }
       });
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(productos));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(productos));
+      } catch (e) {
+        alert("El almacenamiento local está lleno por el tamaño de las imágenes. Considera quitar alguna foto o usar imágenes más ligeras.");
+      }
       renderizarCatalogo();
       recalcularTotales();
       cerrarModalAdmin();
@@ -1029,9 +1228,8 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
     }
 
     function restaurarFabrica() {
-      if (!confirm("¿Restaurar los cortes, descripciones, precios y visibilidad originales del código?")) return;
+      if (!confirm("¿Restaurar los cortes, fotos, descripciones, precios y visibilidad originales del código?")) return;
       localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem("alabastro_catalogo_v2");
       cantidades = {};
       cargarProductos();
       borradorAdmin = productos.map(p => ({ ...p }));
@@ -1045,7 +1243,7 @@ _Solicitud generada desde el catálogo digital de Agropecuaria Alabastro._`;
       const listaParaCodigo = borradorAdmin.map((p, i) => normalizarProducto(p, i));
       const bloque = "const PRODUCTOS_BASE = " + JSON.stringify(listaParaCodigo, null, 2) + ";";
       navigator.clipboard.writeText(bloque).then(() => {
-        alert("Bloque PRODUCTOS_BASE copiado. Pégalo en tu archivo index.html en GitHub para que los cambios sean permanentes para todos los clientes.");
+        alert("Bloque PRODUCTOS_BASE copiado.");
       });
     }
 
